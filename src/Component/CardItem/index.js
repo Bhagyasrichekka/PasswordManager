@@ -1,10 +1,9 @@
 import './index.css'
 
 const CardItem = props => {
-  const {eachItem, deleteItem} = props
-  const {id, user, website, password, isPasswordVisible} = eachItem
+  const {eachItem, deleteItem, isPasswordsVisible} = props
+  const {id, user, website, password} = eachItem
   const initial = user[0].toUpperCase()
-  const passwordText = isPasswordVisible ? password : '********'
 
   const callDeleteFun = () => {
     deleteItem(id)
@@ -19,7 +18,15 @@ const CardItem = props => {
           <br />
           {user}
           <br />
-          {passwordText}
+          {isPasswordsVisible ? (
+            <p>{password}</p>
+          ) : (
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/password-manager-stars-img.png"
+              alt="stars"
+              className="stars"
+            />
+          )}
         </p>
       </div>
       <button type="button" onClick={callDeleteFun}>

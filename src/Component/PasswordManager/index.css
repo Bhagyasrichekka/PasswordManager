@@ -80,6 +80,7 @@ input {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 .heading-searchBar {
   display: flex;
@@ -103,6 +104,24 @@ input {
   align-self: flex-end;
   margin-top: 6px;
 }
-ul {
+.passwords-container {
   flex-wrap: wrap;
+  display: flex;
+}
+
+.no-passwords-img {
+  width: 60%;
+  height: 60%;
+  margin: auto;
+}
+.heading-count {
+  display: flex;
+}
+.count {
+  border: 1px solid #9ba9eb;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+  color: white;
+  margin-left: 10px;
 }

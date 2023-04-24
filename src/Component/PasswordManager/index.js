@@ -9,6 +9,8 @@ class PasswordManager extends Component {
     website: '',
     user: '',
     password: '',
+    input: '',
+    isPasswordsVisible: false,
   }
 
   onChangeWebsite = event => {
@@ -33,14 +35,13 @@ class PasswordManager extends Component {
 
   addItemsToList = event => {
     event.preventDefault()
-    const {website, user, password, isPasswordsVisible} = this.state
+    const {website, user, password} = this.state
 
     const newItem = {
       id: v4(),
       website,
       user,
       password,
-      isPasswordsVisible: false,
     }
     this.setState(prevState => ({
       passwordsList: [...prevState.passwordsList, newItem],
@@ -48,17 +49,32 @@ class PasswordManager extends Component {
     this.setState({user: '', website: '', password: ''})
   }
 
-  updateVisiblePassWords = event => {
+  updateVisiblePassWords = () => {
     this.setState(prevState => ({
-      passwordsList: prevState.passwordsList.map(eachItem => ({
-        ...eachItem,
-        isPasswordsVisible: !prevState.isPasswordsVisible,
-      })),
+      isPasswordsVisible: !prevState.isPasswordsVisible,
     }))
   }
 
+  updateSearchInput = event => {
+    this.setState({input: event.target.value})
+  }
+
   render() {
-    const {passwordsList, website, user, password} = this.state
+    const {
+      passwordsList,
+      website,
+      user,
+      password,
+      input,
+      isPasswordsVisible,
+    } = this.state
+    console.log(isPasswordsVisible)
+    const newList = passwordsList.filter(eachItem =>
+      eachItem.website.toLowerCase().includes(input.toLowerCase()),
+    )
+    const isEmpty = newList.length === 0
+    const count = newList.length
+
     return (
       <div className="bg">
         <div>
@@ -126,14 +142,23 @@ class PasswordManager extends Component {
         </div>
         <div className="bottom-section">
           <div className="heading-searchBar">
-            <h1 className="heading">Your Passwords</h1>
+            <div className="heading-count">
+              <h1 className="heading">Your Passwords</h1>
+              <p className="count">{count}</p>
+            </div>
+
             <div className="input-container">
               <img
                 src="https://assets.ccbp.in/frontend/react-js/password-manager-search-img.png"
                 alt="search"
                 className="icons"
               />
-              <input type="search" placeholder="Search" />
+              <input
+                type="search"
+                placeholder="Search"
+                value={input}
+                onChange={this.updateSearchInput}
+              />
             </div>
           </div>
           <hr className="line" />
@@ -141,20 +166,32 @@ class PasswordManager extends Component {
             <input
               type="checkbox"
               id="show"
-              onClick={this.updateVisiblePassWords}
+              onChange={this.updateVisiblePassWords}
             />
             <label className="label-text" htmlFor="show">
               Show Passwords
             </label>
           </div>
-          <ul>
-            {passwordsList.map(eachItem => (
-              <CardItem
-                key={eachItem.id}
-                eachItem={eachItem}
-                deleteItem={this.deleteItem}
-              />
-            ))}
+          <ul className="passwords-container">
+            {isEmpty ? (
+              <div>
+                <img
+                  src="https://assets.ccbp.in/frontend/react-js/no-passwords-img.png"
+                  alt="no passwords"
+                  className="no-passwords-img"
+                />
+                <p className="heading">No Passwords</p>
+              </div>
+            ) : (
+              newList.map(eachItem => (
+                <CardItem
+                  key={eachItem.id}
+                  eachItem={eachItem}
+                  deleteItem={this.deleteItem}
+                  isPasswordsVisible={isPasswordsVisible}
+                />
+              ))
+            )}
           </ul>
         </div>
       </div>
